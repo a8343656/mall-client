@@ -1,3 +1,4 @@
+import ElementUI from 'element-ui';
 
 /* global Promise */
 const getMsg = () => {
@@ -13,7 +14,12 @@ const getMsg = () => {
 export default {
   async successCall(resp) {
 
-    console.log(resp);
+    const response = resp.data;
+    if(!response.sucess){
+      ElementUI.Notification.error({
+        message: response.errorMsg
+      });
+    }
     return resp;
 
   },

@@ -45,10 +45,9 @@ export default {
       this.$refs.loginData.validate(valid => {
         if (valid) {
           this.loginButtonLoading = true;
-
-          authApi.logIn(this.loginData).then((res) => {
+          authApi.login(this.loginData).then((res) => {
             const apiRes = res.data;
-            if (apiRes.result) {
+            if (apiRes.sucess) {
               sessionStorage.setItem('userId', apiRes.data.userId);
               sessionStorage.setItem('userToken', apiRes.data.token);
               this.$router.push('/');

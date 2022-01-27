@@ -56,14 +56,14 @@ export default new Router({
       path: '/login/:goto?',
       name: 'login',
       meta: { guest: true },
-      component: view('login/login'),
+      component: view('auth/login'),
     },
-    // {
-    //   path: '/register',
-    //   name: 'register',
-    //   meta: { guest: true },
-    //   component: view('forestage/register'),
-    // },
+    {
+      path: '/register',
+      name: 'register',
+      meta: { guest: true },
+      component: view('auth/register'),
+    },
     // {
     //   path: '/member',
     //   meta: { auth: true },
