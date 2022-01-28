@@ -55,11 +55,11 @@ export default {
             address: this.user.address,
           };
           this.registerButtonLoading = true;
-          authApi.userRegister(sendData).then((res) => {
+          authApi.register(sendData).then((res) => {
             this.registerButtonLoading = false;
             const result = res.data;
 
-            if (result.result === true) {
+            if (result.sucess === true) {
               ElementUI.Notification.success({
                 message: '註冊成功，跳轉至首頁',
               });

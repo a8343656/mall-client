@@ -8,5 +8,8 @@ export default {
   },
   logout() {
     return http.post('/auth/logout');
+  },
+  register(sendData) {
+    return http.post('/auth/register',sendData);
   }
 };
