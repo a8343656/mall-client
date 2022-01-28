@@ -2,7 +2,6 @@ import http from '@/http/http';
 
 
 export default {
-  // 使用者基礎操作
   login(sendData) {
     return http.post('/auth/login', sendData);
   },
