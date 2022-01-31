@@ -52,6 +52,11 @@ export default {
       },
       addShoppingCarBtnLoading: false,
     };
+  },watch:{
+    '$route.query.page'(value) {
+      this.page.currentPage = Number(value)
+      this.getProduct();
+    }
   },
   created() {
     if(this.$route.query.page!= undefined){

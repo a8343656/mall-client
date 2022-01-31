@@ -4,7 +4,7 @@
     div(class="topbar")
 
       // 按鈕們
-      router-link( class="button", to="/")
+      router-link( class="button", :to="{name:'home', query:{ page: 1}}")
         el-button 回首頁
 
       router-link( v-show ="!isLogin", to="/login", class="button" ,)
