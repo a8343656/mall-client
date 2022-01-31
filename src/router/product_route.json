@@ -1,7 +1,14 @@
 [
     {
-        "path": "/manage/test",
-        "name": "Test",
-        "auth": ""
+        "path": "product/test",
+        "name": "test",
+        "auth": "",
+        "qstr":":page"
+    },
+    {
+        "path": "product/home",
+        "name": "home",
+        "auth": "",
+        "qstr":"/:page?"
     }
 ]

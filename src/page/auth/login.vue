@@ -1,8 +1,7 @@
 <template lang="pug">
   div
     div(class="title")
-      h1(v-if="this.$route.params.goto === 'backstage'") 管理者登入
-      h1(v-else) 使用者登入
+      h1 使用者登入
 
     el-form(class="login-form" ref="loginData" :model="loginData" :rules="rules")
       div(class="input-group")
@@ -47,7 +46,7 @@ export default {
           this.loginButtonLoading = true;
           authApi.login(this.loginData).then((res) => {
             const apiRes = res.data;
-            if (apiRes.sucess) {
+            if (apiRes.success) {
               sessionStorage.setItem('userId', apiRes.data.userId);
               sessionStorage.setItem('userToken', apiRes.data.token);
               this.$router.push('/');

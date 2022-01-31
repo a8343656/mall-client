@@ -6,7 +6,7 @@
           el-card
             p(class="title") {{product.name}}
               div(class="picture-div")
-                img(class="image"  :src="product.pictureUrl")
+                img(class="image"  :src="product.imageUrl")
 
             div(class="product-detial-group")
               // 讓兩個警示訊息與商品資訊呈現在卡片的左右兩側
@@ -29,7 +29,7 @@
       el-pagination(
         layout="prev, pager, next",
         background
-        :hide-on-single-page="true"
+        hide-on-single-page=true
         :current-page.sync="page.currentPage",
         :page-size="page.pageSize",
         :total.sync="page.total",
@@ -37,7 +37,7 @@
 </template>
 <script>
 import ElementUI from 'element-ui';
-import forestageApi from '~/api/forestage';
+import productApi from '@/api/product';
 
 export default {
   data() {
@@ -54,36 +54,41 @@ export default {
     };
   },
   created() {
+    if(this.$route.query.page!= undefined){
+       this.page.currentPage = Number(this.$route.query.page);
+    }
     this.getProduct();
   },
   methods: {
-    // 顯示加載畫面
-    setLoading(status) {
-      this.$store.dispatch('app/setMainLoading', status);
-    },
+    // // 顯示加載畫面
+    // setLoading(status) {
+    //   this.$store.dispatch('app/setMainLoading', status);
+    // },
     changePage() {
+      this.$router.push({ path: '/product/home', query: { page: this.page.currentPage } })
       this.getProduct();
     },
     getProduct() {
       const sendData = {
-        page: this.page,
-      };
-      this.setLoading(true);
-      forestageApi.getProduct(sendData).then((res) => {
+        page: this.page.currentPage-1
+      }
+
+      //this.setLoading(true);
+      productApi.getProductList(sendData).then((res) => {
         const result = res.data;
 
-        if (result.result) {
-          this.page.total = result.data.total;
-          this.productArray = result.data.data;
+        if (result.success) {
+          this.page.total = result.data.totalElements;
+          this.productArray = result.data.content;
         }
-        setTimeout(() => {
-          this.setLoading(false);
-        }, 500);
+        // setTimeout(() => {
+        //   this.setLoading(false);
+        // }, 500);
       });
     },
     clickBuy(product) {
       // 因為頁面會重新導向，先開啟 loading 避免重覆點擊，routerAfter 有設定關閉
-      this.setLoading(true);
+      //this.setLoading(true);
       this.addShoppingCar(product, true);
     },
     clickAddShoppingCar(product) {
@@ -103,7 +108,7 @@ export default {
           productId: product.id,
         };
 
-        forestageApi.addToShoppingCar(sendData).then((res) => {
+        productApi.addToShoppingCar (sendData).then((res) => {
           const apiRes = res.data;
           if (apiRes.result) {
             // 若是點擊購買按鈕，跳轉至購物車頁面，並且在 session 中加入變數，讓購物車頁面可以判斷是否勾選第一項商品
@@ -198,7 +203,7 @@ export default {
 }
 .description-div {
   width: 300px;
-  /deep/ .description-label {
+  ::v-deep .description-label {
     width: 100px;
   }
 }

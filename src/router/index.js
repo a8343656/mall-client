@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import ProductRoute from './product_route.json'
 
 
 Vue.use(Router);
@@ -15,28 +16,24 @@ const getRoute = (route) => {
 
     //補上如果是 member 介面，強制設定為 auth = true
     const name = item.name;
-    const path = item.path
-    const component = view(path);
+    const component = view(item.path);
+    let path = item.path;
+
+    // 若路由有url參數，改變路徑
+    if(item.qstr){
+      path = item.path + item.qstr
+    }
 
     return {
       name, path, component, meta
     };
   });
-  // 因為 homepage 不需要登入，所以另外做設定
-  childRoute.push({
-    path: '/productDetail/:productId',
-    meta: {
-      guest: true,
-    },
-    component: view('forestage/detail'),
-  });
-  childRoute.push({
-    path: '/buyPage',
-    meta: {
-      auth: true,
-    },
-    component: view('forestage/buy_page'),
-  });
+
+  // childRoute.push({
+  //   path: 'product/home:page?',
+  //   component: view('product/home'),
+  // });
+
 
   return childRoute;
 };
@@ -48,12 +45,12 @@ export default new Router({
     {
       path: '/',
       name: 'homepageLayout',
-      //redirect: '/forestage/home',
-      //children: getRoute(Route),
+      redirect: '/product/home',
+      children: getRoute(ProductRoute),
       component: view('layout/homepage＿layout'),
     },
     {
-      path: '/login/:goto?',
+      path: '/login',
       name: 'login',
       meta: { guest: true },
       component: view('auth/login'),

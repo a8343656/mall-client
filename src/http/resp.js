@@ -15,7 +15,7 @@ export default {
   async successCall(resp) {
 
     const response = resp.data;
-    if(!response.sucess){
+    if(!response.success){
       ElementUI.Notification.error({
         message: response.errorMsg
       });

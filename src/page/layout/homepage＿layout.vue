@@ -7,11 +7,8 @@
       router-link( class="button", to="/")
         el-button 回首頁
 
-      router-link( v-show ="!isLogin", class="button", :to="{name:'login', params:{ goto: 'forestage'}}")
+      router-link( v-show ="!isLogin", to="/login", class="button" ,)
         el-button 登入
-
-      router-link( v-show ="!isLogin", class="button", :to="{name:'login', params:{ goto: 'backstage'}}")
-        el-button 管理者登入
 
       router-link( v-show ="!isLogin", to="/register", class="button")
         el-button 註冊
