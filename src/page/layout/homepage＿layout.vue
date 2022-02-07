@@ -21,8 +21,7 @@
 
       el-button(class="button", v-show ="isLogin", @click="logout" ) 登出
 
-    // 下方顯示 v-loading="showLoading"
-    div(class="rounter-context")
+    div(v-loading="getLoading", class="rounter-context")
       router-view
 </template>
 <script>
@@ -34,11 +33,11 @@ export default {
       isLogin: false,
     };
   },
-  // computed: {
-  //   showLoading() {
-  //     return this.$store.getters['app/mainLoading'];
-  //   },
-  // },
+  computed: {
+    getLoading() {
+      return this.$store.getters['loading'];
+    },
+  },
   created() {
     this.CheckLogin();
   },

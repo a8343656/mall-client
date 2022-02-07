@@ -53,23 +53,26 @@ export default {
       addShoppingCarBtnLoading: false,
     };
   },watch:{
+    // watch 用來判斷是否按 [回到首頁] 造成 url 的改變
     '$route.query.page'(value) {
       this.page.currentPage = Number(value)
       this.getProduct();
     }
   },
   created() {
+    // 如果是一開始進來， router 那邊
     if(this.$route.query.page!= undefined){
        this.page.currentPage = Number(this.$route.query.page);
     }
     this.getProduct();
   },
   methods: {
-    // // 顯示加載畫面
-    // setLoading(status) {
-    //   this.$store.dispatch('app/setMainLoading', status);
-    // },
+    // 顯示加載畫面
+    setLoading(status) {
+      this.$store.dispatch('setLoading', status);
+    },
     changePage() {
+      //大多情況是 url 參數改變 data.page，只有 changePage 時是由 data.page 改變 url
       this.$router.push({ path: '/product/home', query: { page: this.page.currentPage } })
       this.getProduct();
     },
@@ -78,7 +81,7 @@ export default {
         page: this.page.currentPage-1
       }
 
-      //this.setLoading(true);
+      this.setLoading(true);
       productApi.getProductList(sendData).then((res) => {
         const result = res.data;
 
@@ -86,14 +89,14 @@ export default {
           this.page.total = result.data.totalElements;
           this.productArray = result.data.content;
         }
-        // setTimeout(() => {
-        //   this.setLoading(false);
-        // }, 500);
+        setTimeout(() => {
+          this.setLoading(false);
+        }, 500);
       });
     },
     clickBuy(product) {
       // 因為頁面會重新導向，先開啟 loading 避免重覆點擊，routerAfter 有設定關閉
-      //this.setLoading(true);
+      this.setLoading(true);
       this.addShoppingCar(product, true);
     },
     clickAddShoppingCar(product) {
