@@ -29,12 +29,6 @@ const getRoute = (route) => {
     };
   });
 
-  // childRoute.push({
-  //   path: 'product/home:page?',
-  //   component: view('product/home'),
-  // });
-
-
   return childRoute;
 };
 

@@ -1,9 +1,9 @@
 [
     {
-        "path": "product/test",
-        "name": "test",
+        "path": "product/detail",
+        "name": "detail",
         "auth": "",
-        "qstr":":page"
+        "qstr":"/:productId?"
     },
     {
         "path": "product/home",

@@ -135,7 +135,7 @@ export default {
       }
     },
     gotoDetail(product) {
-      this.$router.push({ path: `/productDetail/${product.id}` });
+      this.$router.push({ path: '/product/detail/',  query: { productId: product.id } });
     },
   },
 };
