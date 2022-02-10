@@ -6,6 +6,7 @@ import store  from './store'
 import Element from 'element-ui'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
 Vue.config.productionTip = false
@@ -20,12 +21,10 @@ new Vue({
 }).$mount('#app')
 
 router.beforeEach((to, from, next) => {
-  // // 主區塊顯示loading
-  // store.dispatch('app/setKeepLoading', true);
-  // // 切換路由的loading
-  // store.dispatch('app/setMainLoading', true);
-
-  // 是否要檢查登入狀態
+  // 切換路由的loading
+  store.dispatch('setLoading', true);
+ 
+   // 是否要檢查登入狀態
   if (to.meta.auth) {
     // 因為 axios 有設定 token 過期會導回根目錄，如果去的路徑是需要登入的，試著拿取使用者自身的資料，藉此檢查 token
     const userId = sessionStorage.getItem('userId');
@@ -40,7 +39,7 @@ router.beforeEach((to, from, next) => {
       next('/login');
     }
 
-    // 訪客可以訪問的頁面，如：維護頁、no service
+    // 訪客可以訪問的頁面
   } else {
     next();
   }

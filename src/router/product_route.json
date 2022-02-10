@@ -10,5 +10,11 @@
         "name": "home",
         "auth": "",
         "qstr":"/:page?"
+    },
+    {
+        "path": "product/shopping_car",
+        "name": "shoppingCar",
+        "auth": true,
+        "qstr":""
     }
 ]
