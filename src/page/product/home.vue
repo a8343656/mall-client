@@ -79,7 +79,7 @@ export default {
     },
     getProduct() {
       const sendData = {
-        page: this.page.currentPage-1
+        page: this.page.currentPage
       }
 
       this.setLoading(true);
