@@ -9,7 +9,7 @@
         H1 總金額{{totalPrice}}
 
     el-form(:model="model", ref="shoppingCarRef" :rules="model.inputRules" validate-on-rule-change=true)
-      el-table(:data="model.shoppingCarArray")
+      el-table(:data="model.shoppingCarArray" :cell-style="{padding: '0', height: '100px'}")
         el-table-column(label="勾選" width="150")
           template(slot-scope="scope")
             el-form-item(:prop="'shoppingCarArray.'+scope.$index+'.isSelected'" :rules="model.inputRules.isSelected")
@@ -33,11 +33,7 @@
           template(slot-scope="scope")
             div(class="input-form")
               el-form-item(:prop="'shoppingCarArray.'+scope.$index+'.buyAmount'" :rules="model.inputRules.buyAmount")
-                el-input(class="input" 
-                        type="number" 
-                        placeholder="請輸入購買數量" 
-                        v-model.number="scope.row.buyAmount" 
-                        @change="rowChange(scope.row)")
+                el-input(class="input" type="number" placeholder="請輸入購買數量" v-model.number="scope.row.buyAmount" @change="rowChange(scope.row)")
 
 
     div(class="shopping-car-pagination")
@@ -52,8 +48,8 @@
 </template>
 
 <script>
+import router from '@/router'
 import ElementUI from 'element-ui';
-import productApi from '@/api/product';
 import userApi from '@/api/user';
 
 export default {
@@ -78,9 +74,10 @@ export default {
     const selectedValidator = (rule, value, callback) => {
       const index = rule.field.split('.')[1];
       const onePageData = this.model.shoppingCarArray[index];
+
       // 如果有被勾選，該商品又無法購買，進行警示
       if (value) {
-        if (onePageData.product.isBuyable === 0 || onePageData.product.amount === 0) {
+        if (onePageData.product.isBuyable == "0" || onePageData.product.amount === 0) {
           callback(new Error('該商品無法購買'));
         } else {
           callback();
@@ -95,10 +92,10 @@ export default {
         shoppingCarArray: [],
         inputRules: {
           buyAmount: [{
-            required: true, validator: buyValidator, type: 'number', message:'123'
+            required: true, validator: buyValidator, type: 'number',
           }],
           isSelected: [{
-            required: true, validator: selectedValidator, type: 'bool', trigger: 'blur',
+            required: true, validator: selectedValidator, type: 'bool', trigger: 'change',
           }],
         },
       },
@@ -181,16 +178,22 @@ export default {
       });
     },
     removeFromShoppingCar() {
+      const deletIdList = []
+      this.selectProductArray.forEach(item => {
+        deletIdList.push(item.id);
+      });
+
       const sendData = {
-        deleteList: this.selectProductArray,
+        userId: Number(sessionStorage.getItem('userId')),
+        productIdList: deletIdList,
       };
 
       this.deleteBtnLoading = true;
-      apiForestage.removeFromShoppingCar(sendData).then((res) => {
+      userApi.removeFromShoppingCar(sendData).then((res) => {
         this.deleteBtnLoading = false;
         const apiRes = res.data;
 
-        if (apiRes.result) {
+        if (apiRes.success) {
           ElementUI.Notification.success({
             message: '成功刪除',
           });
@@ -218,7 +221,7 @@ export default {
     goCheckout() {
       this.setLoading(true);
       sessionStorage.setItem('buyArray', JSON.stringify(this.selectProductArray));
-      this.$router.push({ path: '/buyPage' });
+      router.push({ path: '/product/buy_page' });
     },
   },
 };

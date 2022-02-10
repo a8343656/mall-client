@@ -38,6 +38,7 @@
 <script>
 import ElementUI from 'element-ui';
 import router from '@/router'
+import userApi from '@/api/user';
 import productApi from '@/api/product';
 
 export default {
@@ -117,7 +118,7 @@ export default {
           productId: product.id,
         };
 
-        productApi.addToShoppingCar (sendData).then((res) => {
+        userApi.addToShoppingCar (sendData).then((res) => {
           const apiRes = res.data;
           if (apiRes.success) {
             // 若是點擊購買按鈕，跳轉至購物車頁面，並且在 session 中加入變數，讓購物車頁面可以判斷是否勾選第一項商品

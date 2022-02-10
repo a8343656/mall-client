@@ -46,13 +46,11 @@ export default new Router({
     {
       path: '/login',
       name: 'login',
-      meta: { guest: true },
       component: view('auth/login'),
     },
     {
       path: '/register',
       name: 'register',
-      meta: { guest: true },
       component: view('auth/register'),
     },
     // {

@@ -14,4 +14,10 @@ export default {
   getOrderList(sendData) {
     return http.post('/user/getOrderList', sendData);
   },
+  addToShoppingCar(sendData) {
+    return http.post('/user/addToShoppingCar', sendData);
+  },
+  removeFromShoppingCar(sendData) {
+    return http.delete('/user/removeFromShoppingCar', {data:sendData});
+  },
 };
