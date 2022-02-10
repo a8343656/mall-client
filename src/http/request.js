@@ -1,8 +1,8 @@
 export default {
   async successRequest(request) {
+    // request.withCredentials = true;
     request.headers.userId = sessionStorage.getItem('userId');
     request.headers.userToken = sessionStorage.getItem('userToken');
-
     return request;
   },
   /* global Promise */
