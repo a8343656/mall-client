@@ -18,6 +18,7 @@
 <script>
 import ElementUI from 'element-ui';
 import productApi from '@/api/product';
+import router from '@/router'
 
 export default {
   data() {
@@ -66,7 +67,7 @@ export default {
           message: '尚未登入請先登入',
         });
 
-        this.$router.push('/login');
+        router.push('/login');
       } else {
         const sendData = {
           userId: sessionStorage.getItem('userId'),
@@ -79,7 +80,7 @@ export default {
             // 若是點擊購買按鈕，跳轉至購物車頁面，並且在 session 中加入變數，讓購物車頁面可以判斷是否勾選第一項商品
             if (isClickBuyButton) {
               sessionStorage.setItem('buyNow', true);
-              this.$router.push({ path: '/forestage/shopping_car' });
+              router.push({ path: '/product/shopping_car' });
             } else {
               // 單純點及加入購物車
               ElementUI.Notification.success({

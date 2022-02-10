@@ -37,6 +37,7 @@
 </template>
 <script>
 import ElementUI from 'element-ui';
+import router from '@/router'
 import productApi from '@/api/product';
 
 export default {
@@ -73,7 +74,7 @@ export default {
     },
     changePage() {
       //大多情況是 url 參數改變 data.page，只有 changePage 時是由 data.page 改變 url
-      this.$router.push({ path: '/product/home', query: { page: this.page.currentPage } })
+      router.push({ path: '/product/home', query: { page: this.page.currentPage } })
       this.getProduct();
     },
     getProduct() {
@@ -109,20 +110,20 @@ export default {
         ElementUI.Notification.warning({
           message: '尚未登入請先登入',
         });
-        this.$router.push('/login');
+        router.push('/login');
       } else {
         const sendData = {
-          userId: sessionStorage.getItem('userId'),
+          userId: parseInt(sessionStorage.getItem('userId')),
           productId: product.id,
         };
 
         productApi.addToShoppingCar (sendData).then((res) => {
           const apiRes = res.data;
-          if (apiRes.result) {
+          if (apiRes.success) {
             // 若是點擊購買按鈕，跳轉至購物車頁面，並且在 session 中加入變數，讓購物車頁面可以判斷是否勾選第一項商品
             if (isClickBuyButton) {
               sessionStorage.setItem('buyNow', true);
-              this.$router.push({ path: '/forestage/shopping_car' });
+              router.push({ path: '/product/shopping_car' });
             } else {
               // 單純點及加入購物車
               this.addShoppingCarBtnLoading = false;
@@ -135,7 +136,7 @@ export default {
       }
     },
     gotoDetail(product) {
-      this.$router.push({ path: '/product/detail/',  query: { productId: product.id } });
+      router.push({ path: '/product/detail/',  query: { productId: product.id } });
     },
   },
 };

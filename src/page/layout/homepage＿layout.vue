@@ -13,7 +13,7 @@
       router-link( v-show ="!isLogin", to="/register", class="button")
         el-button 註冊
 
-      router-link( v-show ="isLogin", class="button", to="/forestage/shopping_car")
+      router-link( v-show ="isLogin", class="button", to="/product/shopping_car")
         el-button 購物車
 
       router-link( v-show ="isLogin", class="button", to="/member")
