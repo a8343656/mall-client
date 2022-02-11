@@ -88,6 +88,10 @@ export default {
         const result = res.data;
 
         if (result.success) {
+          // 如果頁數大於後端的最末頁數，強制轉跳至最末頁
+          if(this.page.currentPage > result.data.totalPages){
+            router.push({ path: '/product/home', query: { page: result.data.totalPages } })
+          }
           this.page.total = result.data.totalElements;
           this.productArray = result.data.content;
         }

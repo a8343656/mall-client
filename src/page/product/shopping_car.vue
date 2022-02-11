@@ -180,7 +180,7 @@ export default {
     removeFromShoppingCar() {
       const deletIdList = []
       this.selectProductArray.forEach(item => {
-        deletIdList.push(item.id);
+        deletIdList.push(item.productId);
       });
 
       const sendData = {
