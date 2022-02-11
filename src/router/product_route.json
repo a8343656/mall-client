@@ -16,5 +16,17 @@
         "name": "shoppingCar",
         "auth": true,
         "qstr":""
+    },
+    {
+        "path": "product/buy_page",
+        "name": "buyPage",
+        "auth": true,
+        "qstr":""
+    },
+    {
+        "path": "product/test",
+        "name": "test",
+        "auth": "",
+        "qstr":""
     }
 ]
