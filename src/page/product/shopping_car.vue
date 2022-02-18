@@ -32,8 +32,8 @@
         el-table-column(label="購買數量" )
           template(slot-scope="scope")
             div(class="input-form")
-              el-form-item(:prop="'shoppingCarArray.'+scope.$index+'.buyAmount'" :rules="model.inputRules.buyAmount")
-                el-input(class="input" type="number" placeholder="請輸入購買數量" v-model.number="scope.row.buyAmount" @change="rowChange(scope.row)")
+              el-form-item(:prop="'shoppingCarArray.'+scope.$index+'.amount'" :rules="model.inputRules.amount")
+                el-input(class="input" type="number" placeholder="請輸入購買數量" v-model.number="scope.row.amount" @change="rowChange(scope.row)")
 
 
     div(class="shopping-car-pagination")
@@ -91,7 +91,7 @@ export default {
       model: {
         shoppingCarArray: [],
         inputRules: {
-          buyAmount: [{
+          amount: [{
             required: true, validator: buyValidator, type: 'number',
           }],
           isSelected: [{
@@ -136,14 +136,14 @@ export default {
           // 後端資料傳過來後，預設「是否被選中」、「購買數量」這兩個值
           onePageData.forEach(apiData => {
             apiData.isSelected = false;
-            apiData.buyAmount = 1;
+            apiData.amount = 1;
             apiData.buyPrice = apiData.product.price;
 
             // 判斷是否已在前端被選中，將塞入購買數量與勾選塞入
             this.selectProductArray.forEach(selectData => {
               if (selectData.id === apiData.id) {
                 apiData.buyPrice = selectData.buyPrice;
-                apiData.buyAmount = selectData.buyAmount;
+                apiData.amount = selectData.amount;
                 apiData.isSelected = true;
               }
             });
@@ -205,7 +205,7 @@ export default {
     },
     rowChange(row) {
       // 計算購買金額
-      row.buyPrice = row.product.price * row.buyAmount; // eslint-disable-line no-param-reassign
+      row.buyPrice = row.product.price * row.amount; // eslint-disable-line no-param-reassign
 
       // 先從已選擇的清單中移除
       this.selectProductArray = this.selectProductArray.filter(product => product.id !== row.id);
@@ -215,7 +215,7 @@ export default {
       }
       this.totalPrice = 0;
       this.selectProductArray.forEach(selectData => {
-        this.totalPrice += selectData.buyAmount * selectData.product.price;
+        this.totalPrice += selectData.amount * selectData.product.price;
       });
     },
     goCheckout() {

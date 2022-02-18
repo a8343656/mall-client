@@ -21,7 +21,7 @@
 
       el-button(class="button", v-show ="isLogin", @click="logout" ) 登出
 
-    div(v-loading="getLoading", class="rounter-context")
+    div(v-loading.fullscreen="getLoading", class="rounter-context")
       router-view
 </template>
 <script>

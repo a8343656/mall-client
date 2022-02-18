@@ -2,6 +2,9 @@ import http from '@/http/http';
 
 
 export default {
+  getMemberData(sendData) {
+    return http.post('/user/getMemberData', sendData);
+  },
   changeMemberData(sendData) {
     return http.put('/user/changeMemberData', sendData);
   },

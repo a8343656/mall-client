@@ -1,7 +1,12 @@
 [
     {
-        "path": "/manage/test",
-        "name": "Test",
-        "auth": ""
+        "path": "member/member_data",
+        "name": "memberData",
+        "auth": true
+    },
+    {
+        "path": "member/buylist",
+        "name": "buylist",
+        "auth": true
     }
 ]

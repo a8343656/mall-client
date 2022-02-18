@@ -5,8 +5,10 @@
       el-card(class="buy-table")
         el-table(:data="buyArray")
           el-table-column(label="商品名稱" prop="product.name")
+          el-table-column(label="單價" prop="product.price")
+          el-table-column(label="數量" prop="amount")
           el-table-column(label="購買金額" prop="buyPrice")
-          el-table-column(label="購買數量" prop="buyAmount")
+          
         div(class="total-descrip")
           H4 總共{{buyArray.length}}個商品
           H1 總金額{{totalPrice}}
@@ -128,10 +130,20 @@ export default {
       }
     },
     sendOrder() {
+      
       const sendData = {
         userId: Number(sessionStorage.getItem('userId')),
-        buyList: this.buyArray,
+        totalPrice: this.totalPrice,
+        detailList: []
       };
+      this.buyArray.forEach(item =>{
+        var detail = new Object();
+        detail.productId = item.productId;
+        detail.amount = item.amount;
+        detail.productPrice = item.product.price;
+
+        sendData.detailList.push(detail);
+      })
 
       this.$refs.buyDataRef.validate(valid => {
         if (valid) {

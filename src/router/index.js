@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import ProductRoute from './product_route.json'
+import MemberRoute from './member_route.json'
 
 
 Vue.use(Router);
@@ -29,6 +30,15 @@ const getRoute = (route) => {
     };
   });
 
+  // childRoute.push({
+  //   path: '/aaa',
+  //   meta: {
+  //     auth: true,
+  //   },
+  //   component: view('member/member_data'),
+  // });
+
+
   return childRoute;
 };
 
@@ -53,13 +63,14 @@ export default new Router({
       name: 'register',
       component: view('auth/register'),
     },
-    // {
-    //   path: '/member',
-    //   meta: { auth: true },
-    //   redirect: '/member/member_data/member_data',
-    //   children: getRoute(MemberRoute),
-    //   component: view('home/member_layout'),
-    // },
+    {
+      path: '/member',
+      name: 'memberpageLayout',
+      meta: { auth: true },
+      //redirect: '/member/member_data/member_data',
+      children: getRoute(MemberRoute),
+      component: view('layout/member_layout'),
+    },
     // {
     //   path: '*',
     //   meta: {
