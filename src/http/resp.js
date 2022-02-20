@@ -18,12 +18,12 @@ export default {
     const response = resp.data;
     if(!response.success){
       // token 過期
-      if(response.errorCode == '1001104'){
+      if(response.errorCode == '1001104' || response.errorCode == '1001103'){
         sessionStorage.removeItem('userId');
         sessionStorage.removeItem('userToken');
         router.push('/login', () => {
           ElementUI.Notification.warning({
-            message: response.errorMsg
+            message: "閒置過久，請重新登入"
           });
         });
       }
