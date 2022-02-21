@@ -2,11 +2,11 @@ import http from '@/http/http';
 
 
 export default {
-  getMemberData(sendData) {
-    return http.post('/user/getMemberData', sendData);
+  getUserData(sendData) {
+    return http.post('/user/getUserData', sendData);
   },
-  changeMemberData(sendData) {
-    return http.put('/user/changeMemberData', sendData);
+  changeUserData(sendData) {
+    return http.put('/user/changeUserData', sendData);
   },
   changePws(sendData) {
     return http.put('/user/changePws', sendData);

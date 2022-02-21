@@ -22,7 +22,7 @@
 
       // 中央顯示區域  v-loading="showLoading"
     div(class="right-context")
-      div(v-loading.fullscreen="getLoading" class="show-div")
+      div( class="show-div")
         router-view
 </template>
 <script>
@@ -68,6 +68,7 @@ export default ({
 }
 
 .sidebar {
+  border-right-width: 0;
   float: left;
   width: 20%;
   height: 93vh;
