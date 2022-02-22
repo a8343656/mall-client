@@ -21,10 +21,8 @@
           i(class="el-icon-box")
           span(slot="title") 訂單管理
 
-        // 中央顯示區域  v-loading="showLoading"
-      div(v-loading.fullscreen="getLoading" class="right-context")
-        div( class="show-div")
-          router-view
+      // 中央顯示區域  v-loading="showLoading"
+      router-view( v-loading.fullscreen="getLoading" class="right-context" )
 </template>
 <script>
 import ElementUI from 'element-ui';
@@ -86,12 +84,10 @@ export default ({
     }
 
     .right-context {
-      overflow-y: hidden;
+      height: calc(100% - 15px);
       width: calc(100% - 270px);
-
-      .show-div {
-        margin: 15px 0px 0px 15px;
-      }
+      margin: 15px 0px 0px 15px;
+      
 
   }
 }

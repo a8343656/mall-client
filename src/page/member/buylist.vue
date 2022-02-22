@@ -1,7 +1,7 @@
 <template lang="pug">
-  div(class="buylist" )
+  div(class="buylist" v-infinite-scroll="load" infinite-scroll-disabled="scrollDisabled" )
     ul
-      li(v-for="item in buylist" :key="item.id" v-infinite-scroll="load" infinite-scroll-disabled="scrollDisabled" infinite-scroll-distance=30)
+      li(v-for="item in buylist" :key="item.id" )
         el-card
           div
             div(class="top-describe")
@@ -30,7 +30,7 @@ export default {
         buylist:[],
         page:{
           currentPage: 1,
-          pageSize: 3,
+          pageSize: 2,
           totalPage:0,
         },
         sortData: {
@@ -51,7 +51,6 @@ export default {
     },
     methods: {
       load(){
-        console.log('a')
         if(this.page.currentPage < this.page.totalPage){
           this.loading = true;
           this.page.currentPage ++;
@@ -87,7 +86,7 @@ export default {
     overflow-y: auto;
     
   ul{
-
+    
     list-style-type: none;
     padding:0;
     li{
