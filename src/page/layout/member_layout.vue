@@ -56,43 +56,48 @@ export default ({
   height: 100%;
   display: flex;
   flex-direction:column;
-  
-}
-.topbar {
 
-  background: #2c3e50;
-  width: 100%;
-  height: 70px;
 
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  .topbar {
+    position: sticky;
+    background: #2c3e50;
+    height: 70px;
 
-  .button {
-    margin: 0px 20px 0px 20px ;
-  }
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 
-}
-.bottom{
-  display: flex;
-  flex-direction:row;
-  height: calc(100% - 70px);
-
-  .sidebar {
-    border-right-width: 0;
-    width: 270px;
-  }
-
-  .right-context {
-    width: calc(100% - 270px);
-
-    .show-div {
-      margin: 15px 0px 0px 15px;
+    .button {
+      margin: 0px 20px 0px 20px ;
     }
 
   }
+  .bottom{
+    position: sticky;
+    width: 100%;
+    left:0;
+    display: flex;
+    flex-direction:row;
+    height: calc(100vh - 70px);
 
+    .sidebar {
+      border-right-width: 0;
+      width: 270px;
+    }
+
+    .right-context {
+      overflow-y: hidden;
+      width: calc(100% - 270px);
+
+      .show-div {
+        margin: 15px 0px 0px 15px;
+      }
+
+  }
 }
+}
+
+
 
 
 </style>

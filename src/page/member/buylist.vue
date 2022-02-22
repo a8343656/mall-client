@@ -1,7 +1,7 @@
 <template lang="pug">
-  div(class="buylist")
-    ul(v-infinite-scroll="load" infinite-scroll-disabled="scrollDisabled")
-      li(v-for="item in buylist" :key="item.id")
+  div(class="buylist" )
+    ul
+      li(v-for="item in buylist" :key="item.id" v-infinite-scroll="load" infinite-scroll-disabled="scrollDisabled" infinite-scroll-distance=30)
         el-card
           div
             div(class="top-describe")
@@ -30,7 +30,7 @@ export default {
         buylist:[],
         page:{
           currentPage: 1,
-          pageSize: 2,
+          pageSize: 3,
           totalPage:0,
         },
         sortData: {
@@ -51,6 +51,7 @@ export default {
     },
     methods: {
       load(){
+        console.log('a')
         if(this.page.currentPage < this.page.totalPage){
           this.loading = true;
           this.page.currentPage ++;
@@ -82,18 +83,20 @@ export default {
 
 <style lang="scss" scoped>
 .buylist {
-  height: 100vh;
-  overflow-y: auto;
+    height: 100vw;
+    overflow-y: auto;
+    
   ul{
+
     list-style-type: none;
     padding:0;
     li{
       margin-bottom:10px;
       .top-describe{
-      display: flex;
-      justify-content:space-between;
-      align-items: center;
-      height: 120px;
+        display: flex;
+        justify-content:space-between;
+        align-items: center;
+        height: 120px;
       }
       .cancel-btn{
         margin: 20px;
