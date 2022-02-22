@@ -1,6 +1,6 @@
 <template lang="pug">
   div(class="buylist")
-    ul
+    ul(v-infinite-scroll="load" infinite-scroll-disabled="scrollDisabled")
       li(v-for="item in buylist" :key="item.id")
         el-card
           div
@@ -22,16 +22,16 @@
 
 </template>
 <script>
-import ElementUI from 'element-ui';
 import userApi from '@/api/user';
 
 export default {
     data() {
       return {
-        buylist:{},
+        buylist:[],
         page:{
           currentPage: 1,
-          pageSize: 5,
+          pageSize: 2,
+          totalPage:0,
         },
         sortData: {
         column: 'updateTime',
@@ -40,10 +40,24 @@ export default {
         loading:false,
       };
     },
+    computed:{
+      scrollDisabled(){
+        // 正在 loading 或者沒有更多資料時禁用 scroll
+        return this.loading || this.page.currentPage >= this.page.totalPage
+      }
+    },
     created() {
-    this.getBuylist();
-   },
+      this.getBuylist();
+    },
     methods: {
+      load(){
+        if(this.page.currentPage < this.page.totalPage){
+          this.loading = true;
+          this.page.currentPage ++;
+          this.getBuylist();
+          this.loading = false;
+        }
+      },
       getBuylist(){
         const sendData = {
           id: Number(sessionStorage.getItem('userId')),
@@ -55,9 +69,10 @@ export default {
         userApi.getBuylist(sendData).then((res) => {
           const apiRes = res.data;
           if(apiRes.success){
-            this.buylist = apiRes.data.content;
-
-            console.log(apiRes);
+            apiRes.data.content.forEach(item => {
+              this.buylist.push(item);
+            });
+            this.page.totalPage = apiRes.data.totalPages;
           }
         })
       }
@@ -67,6 +82,8 @@ export default {
 
 <style lang="scss" scoped>
 .buylist {
+  height: 100vh;
+  overflow-y: auto;
   ul{
     list-style-type: none;
     padding:0;
