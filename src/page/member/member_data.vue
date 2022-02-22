@@ -1,7 +1,6 @@
 <template lang="pug">
-
+ 
   div(class="mainwindow")
-
     div(class="description-div")
       el-descriptions(title="會員資料", :column="1" , label-class-name ="description-label", contentClassName="my-content" border)
           el-descriptions-item(label="姓名") {{userData.name}}
@@ -27,14 +26,12 @@
 
 
     el-dialog(:visible.sync="changeUserDataVisiable", title="更改會員資料", width="550px")
-      el-form(:model="userData", ref="changeUserDataRef", :rules="changeUserDataRules", label-position="top", label-width="90px")
+      el-form(:model="changeUserData", ref="changeUserDataRef", :rules="changeUserDataRules", label-position="top", label-width="90px")
         div(class="input")
           el-form-item(label="姓名", prop="name")
-            el-input( class="input", v-model="userData.name")
+            el-input( class="input", v-model="changeUserData.name" )
           el-form-item(label="地址", prop="address")
-            el-input(class="input", v-model="userData.address")
-          el-form-item(label="電話", prop="phone")
-            el-input(class="input", v-model="userData.phone")
+            el-input(class="input", v-model="changeUserData.address")
 
       span(slot="footer" class="dialog-footer")
         el-button(type="primary", @click="changeUserDataOk()" :loading="saveBtnLoading") 保存
@@ -74,14 +71,17 @@ export default {
     const changeUserDataRules = {
       name: [{ required: true, whitespace: true, message: '姓名不得為空' }],
       address: [{ required: true, whitespace: true, message: '地址不得為空' }],
-      phone: [{ required: true, whitespace: true, message: '電話不得為空' }],
+      //phone: [{ required: true, whitespace: true, message: '電話不得為空' }],
     };
     return {
       userData: {
         name: '',
         address: '',
-        phone: '',
         status: '',
+      },
+      changeUserData:{
+        name: '',
+        address: '',
       },
       changePwsWindowVisiable: false,
       changePwsRules,
@@ -104,14 +104,13 @@ export default {
     getUserData() {
       this.setLoading(true);
       const sendData = {
-        id: sessionStorage.getItem('userId'),
+        id: Number(sessionStorage.getItem('userId'))
       };
-      userApi.getMemberData(sendData).then((res) => {
+      userApi.getUserData(sendData).then((res) => {
         const apiRes = res.data;
 
         if (apiRes.success) {
-          const apiData = apiRes.data;
-          this.userData = apiData[0];
+          this.userData = apiRes.data;
         }
         setTimeout(() => {
           this.setLoading(false);
@@ -136,13 +135,13 @@ export default {
     },
     changePwsOk() {
       const sendData = {
-        id: sessionStorage.getItem('userId'),
+        id: Number(sessionStorage.getItem('userId')),
         password: this.changePwsState.newPws,
       };
       this.$refs.changePwsRef.validate(valid => {
         if (valid) {
           this.saveBtnLoading = true;
-          userApi.changePassword(sendData).then((res) => {
+          userApi.changePws(sendData).then((res) => {
             this.saveBtnLoading = false;
             const apiRes = res.data;
 
@@ -165,14 +164,15 @@ export default {
     },
 
     openChangeUserDataWindow() {
+      this.changeUserData.name = this.userData.name;
+      this.changeUserData.address = this.userData.address;
       this.changeUserDataVisiable = true;
     },
     changeUserDataOk() {
       const sendData = {
-        id: sessionStorage.getItem('userId'),
-        name: this.userData.name,
-        address: this.userData.address,
-        phone: this.userData.phone,
+        id: Number(sessionStorage.getItem('userId')),
+        name: this.changeUserData.name,
+        address: this.changeUserData.address,
       };
 
       this.$refs.changeUserDataRef.validate(valid => {
@@ -219,8 +219,8 @@ export default {
 }
 .description-div {
   width: 500px;
-  ::v-deep .description-label {
-    width: 10px;
+  .description-label {
+    width: 100px;
   }
 }
 

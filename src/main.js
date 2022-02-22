@@ -44,3 +44,7 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
+
+router.afterEach(() =>{
+  store.dispatch('setLoading', false);
+})

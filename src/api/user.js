@@ -14,8 +14,8 @@ export default {
   getShoppingCarList(sendData) {
     return http.post('/user/getShoppingCarList', sendData);
   },
-  getOrderList(sendData) {
-    return http.post('/user/getOrderList', sendData);
+  getBuylist(sendData) {
+    return http.post('/user/getBuylist', sendData);
   },
   addToShoppingCar(sendData) {
     return http.post('/user/addToShoppingCar', sendData);
