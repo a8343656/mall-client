@@ -148,34 +148,33 @@ export default {
 </script>
 <style lang="scss" scoped>
 
-.home-page-list ul li {
-  width: 25%;
-  display: inline-block;
+.home-page-list  {
+  ul li{
+    width: 25%;
+    display: inline-block;
 
-  .title {
-    font-size: 20px
-  }
-  .product-detial-group {
-    display: flex;
-    justify-content: space-between;
-
-    .proudct-warn {
-      color: red;
-      font-size: 20px;
+    .title {
+      font-size: 20px
     }
-    .amount-text {
-      font-size: 15px;
+    .product-detial-group {
+      display: flex;
+      justify-content: space-between;
+
+      .proudct-warn {
+        color: red;
+        font-size: 20px;
+      }
+      .amount-text {
+        font-size: 15px;
+      }
+    }
+    .btn-group {
+      .home-page-button {
+        height: 50px;
+        margin: 5px;
+      }
     }
   }
-  .btn-group {
-
-    .home-page-button {
-      // width: 120px;
-      height: 50px;
-      margin: 5px;
-    }
-  }
-
 }
 
 .picture-div {
@@ -198,29 +197,7 @@ export default {
   float: right;
   margin: 2px 15px 0px 0px;
 }
-.input-form {
-  margin: 20px 0px 0px 0px;
-  .input {
-    width: 170px;
-  }
-}
 
-.detail-text {
-  font-size: 1px
-}
-.detail-title {
-  font-size: 30px
-}
-
-.buy-price {
-  display: flex;
-}
-.description-div {
-  width: 300px;
-  ::v-deep .description-label {
-    width: 100px;
-  }
-}
 .buy-description-div {
   width: 150px
 }

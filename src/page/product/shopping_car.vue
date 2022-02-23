@@ -228,7 +228,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .all {
-  margin: 1%;
+  padding: 10px;
+  box-sizing: border-box;
 }
 .proudct-warn {
   color: red;

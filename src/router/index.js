@@ -67,7 +67,7 @@ export default new Router({
       path: '/member',
       name: 'memberpageLayout',
       meta: { auth: true },
-      //redirect: '/member/member_data/member_data',
+      redirect: '/member/member_data/member_data',
       children: getRoute(MemberRoute),
       component: view('layout/member_layout'),
     },

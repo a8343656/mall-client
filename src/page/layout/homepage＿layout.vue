@@ -1,8 +1,7 @@
 <template lang="pug">
-  div(class="all")
+  div
     // topbar們
     div(class="topbar")
-
       // 按鈕們
       router-link( class="button", :to="{name:'home', query:{ page: 1}}")
         el-button 回首頁
@@ -21,8 +20,8 @@
 
       el-button(class="button", v-show ="isLogin", @click="logout" ) 登出
 
-    div(v-loading.fullscreen="getLoading", class="rounter-context")
-      router-view
+
+    router-view(v-loading="getLoading", class="rounter-context")
 </template>
 <script>
 import ElementUI from 'element-ui';
@@ -67,15 +66,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.all {
-  width: 100%;
-  height: 100%;
-}
 
 .topbar {
+  position: sticky;
   background: #2c3e50;
-  width: 100%;
-  height: 7vh;
+  height: 70px;
 
   display: flex;
   justify-content: flex-end;
@@ -88,8 +83,8 @@ export default {
 }
 
 .rounter-context {
-
   width: 100%;
-  height: 93vh;
+  overflow-y: auto;
+  height: calc(100vh - 70px);
 }
 </style>

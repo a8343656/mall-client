@@ -49,9 +49,6 @@ export default ({
 </script>
 <style lang="scss" scoped>
 .all {
-
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction:column;
 
@@ -87,8 +84,6 @@ export default ({
       height: calc(100% - 15px);
       width: calc(100% - 270px);
       margin: 15px 0px 0px 15px;
-      
-
   }
 }
 }
