@@ -69,8 +69,6 @@ export default ({
   }
   .bottom{
     position: sticky;
-    width: 100%;
-    left:0;
     display: flex;
     flex-direction:row;
     height: calc(100vh - 70px);
