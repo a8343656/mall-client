@@ -83,8 +83,9 @@ export default ({
     .right-context {
       height: calc(100% - 15px);
       width: calc(100% - 270px);
-      margin: 15px 0px 0px 15px;
-  }
+      padding: 15px;
+      box-sizing: border-box;
+    }
 }
 }
 
