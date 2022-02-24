@@ -104,7 +104,7 @@ export default {
     getUserData() {
       this.setLoading(true);
       const sendData = {
-        id: Number(sessionStorage.getItem('userId'))
+        userId: Number(sessionStorage.getItem('userId'))
       };
       userApi.getUserData(sendData).then((res) => {
         const apiRes = res.data;
@@ -135,7 +135,7 @@ export default {
     },
     changePwsOk() {
       const sendData = {
-        id: Number(sessionStorage.getItem('userId')),
+        userId: Number(sessionStorage.getItem('userId')),
         password: this.changePwsState.newPws,
       };
       this.$refs.changePwsRef.validate(valid => {
@@ -170,7 +170,7 @@ export default {
     },
     changeUserDataOk() {
       const sendData = {
-        id: Number(sessionStorage.getItem('userId')),
+        userId: Number(sessionStorage.getItem('userId')),
         name: this.changeUserData.name,
         address: this.changeUserData.address,
       };

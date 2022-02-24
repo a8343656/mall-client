@@ -60,7 +60,7 @@ export default {
       },
       getBuylist(){
         const sendData = {
-          id: Number(sessionStorage.getItem('userId')),
+          userId: Number(sessionStorage.getItem('userId')),
           page: this.page.currentPage,
           pageSize: this.page.pageSize,
           sortCol: this.sortData.column,
