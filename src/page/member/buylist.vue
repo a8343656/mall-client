@@ -2,7 +2,7 @@
   div
     div(class="search-group")
       h2(class="search-item") 訂單狀態查詢
-      el-select(class="search-item" v-model="search.status" @change="getBuylist()")
+      el-select(class="search-item" v-model="search.status" @change="getBuylist(true)")
         el-option(:key="item.key" 
                   :label="item.label" 
                   :value="item.value" 
@@ -78,7 +78,7 @@ export default {
       }
     },
     created() {
-      this.getBuylist();
+      this.getBuylist(true);
     },
     methods: {
       setLoading(status) {
@@ -88,10 +88,13 @@ export default {
         if(this.page.currentPage < this.page.totalPage){
           this.loading = true;
           this.page.currentPage ++;
-          this.getBuylist(true);
+          this.getBuylist(false);
         }
       },
-      getBuylist(loadMore){
+      getBuylist(refreshPage){
+        if(refreshPage){
+          this.page.currentPage = 1;
+        }
         const sendData = {
           userId: Number(sessionStorage.getItem('userId')),
           status:this.search.status,
@@ -107,12 +110,12 @@ export default {
           if(apiRes.success){
 
             setTimeout(() => {
-            if(loadMore){
+              if(refreshPage){
+               this.buylist = apiRes.data.content;
+              } else {
                 apiRes.data.content.forEach(item => {
                   this.buylist.push(item);
                 });
-              } else {
-                this.buylist = apiRes.data.content;
               }
               this.loading = false;
             }, 500);

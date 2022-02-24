@@ -8,8 +8,10 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import elTableInfiniteScroll from 'el-table-infinite-scroll';
 
 Vue.config.productionTip = false
+Vue.use(elTableInfiniteScroll);
 Vue.use(Element)
 Vue.use(Vuex)
 Vue.use(VueAxios, axios)

@@ -4,15 +4,21 @@
       div(class="top-button")
         el-button(:disabled="selectProductArray.length == 0" type="primary" @click="goCheckout()") 去結帳
         el-button(:disabled="selectProductArray.length == 0" @click="removeFromShoppingCar()" :loading="deleteBtnLoading") 刪除
+        el-checkbox(v-model="selectAll") 全選
       div(class="top-total-descrip")
         H4 總共{{selectProductArray.length}}個商品
         H1 總金額{{totalPrice}}
 
-    el-form(:model="model", ref="shoppingCarRef" :rules="model.inputRules" validate-on-rule-change=true)
-      el-table(:data="model.shoppingCarArray" :cell-style="{padding: '0', height: '100px'}")
+    el-form(class="form" :model="model")
+      el-table(class="table"
+              height="400"
+              :data="model.shoppingCarArray" 
+              :cell-style="{padding: '0', height: '100px'}" 
+              v-el-table-infinite-scroll="load"
+              infinite-scroll-disabled="scrollDisabled")
         el-table-column(label="勾選" width="150")
           template(slot-scope="scope")
-            el-form-item(:prop="'shoppingCarArray.'+scope.$index+'.isSelected'" :rules="model.inputRules.isSelected")
+            el-form-item(:prop="'shoppingCarArray.'+scope.$index+'.isSelected'" )
               el-checkbox(v-model="scope.row.isSelected" @change="rowChange(scope.row)" )
 
         el-table-column(label="商品狀態")
@@ -21,7 +27,7 @@
             p(class="proudct-warn" v-if="scope.row.product.amount == 0 && scope.row.product.isBuyable != 0") 庫存不足
             p(class="proudct-warn" v-if="scope.row.product.isBuyable == 0") 商品下架中
 
-        el-table-column(label="商品名稱" prop="product.name")
+        el-table-column(label="商品id" prop="product.id")
 
         el-table-column(label="庫存數量" prop="product.amount")
 
@@ -32,19 +38,8 @@
         el-table-column(label="購買數量" )
           template(slot-scope="scope")
             div(class="input-form")
-              el-form-item(:prop="'shoppingCarArray.'+scope.$index+'.amount'" :rules="model.inputRules.amount")
-                el-input(class="input" type="number" placeholder="請輸入購買數量" v-model.number="scope.row.amount" @change="rowChange(scope.row)")
-
-
-    div(class="shopping-car-pagination")
-      el-pagination(
-        layout="prev, pager, next"
-        background
-        :hide-on-single-page="true"
-        :current-page.sync="page.currentPage"
-        :page-size="page.pageSize"
-        :total.sync="page.total"
-        @current-change="changePage()")
+              el-form-item(:prop="'shoppingCarArray.'+scope.$index+'.amount'" )
+                el-input-number(class="input" type="number"  v-model.number="scope.row.amount" @change="rowChange(scope.row)")
 </template>
 
 <script>
@@ -54,50 +49,9 @@ import userApi from '@/api/user';
 
 export default {
   data() {
-    const buyValidator = (rule, value, callback) => {
-      const index = rule.field.split('.')[1];
-      const onePageData = this.model.shoppingCarArray[index];
-
-      // 用是否有勾選來判斷，是否需要進行驗證
-      if (onePageData.isSelected) {
-        if (value === '' || value <= 0) {
-          callback(new Error('請輸入購買數量'));
-        } else if (onePageData.product.amount < value) {
-          callback(new Error('購買數量大於庫存'));
-        } else {
-          callback();
-        }
-      } else {
-        callback();
-      }
-    };
-    const selectedValidator = (rule, value, callback) => {
-      const index = rule.field.split('.')[1];
-      const onePageData = this.model.shoppingCarArray[index];
-
-      // 如果有被勾選，該商品又無法購買，進行警示
-      if (value) {
-        if (onePageData.product.isBuyable == "0" || onePageData.product.amount === 0) {
-          callback(new Error('該商品無法購買'));
-        } else {
-          callback();
-        }
-      } else {
-        callback();
-      }
-    };
     return {
-      buyWindowVisible: false,
       model: {
         shoppingCarArray: [],
-        inputRules: {
-          amount: [{
-            required: true, validator: buyValidator, type: 'number',
-          }],
-          isSelected: [{
-            required: true, validator: selectedValidator, type: 'bool', trigger: 'change',
-          }],
-        },
       },
       totalPrice: 0,
       selectProductArray: [],
@@ -105,20 +59,40 @@ export default {
         currentPage: 1,
         total: 0,
         pageSize: 5,
+        totalPage: 0,
         previewPage: undefined,
       },
       deleteBtnLoading: false,
+      selectAll: false,
+      loading: false,
     };
+  },
+  computed:{
+    scrollDisabled(){
+      // 正在 loading 或者沒有更多資料時禁用 scroll
+      return this.loading || this.page.currentPage >= this.page.totalPage
+    },
+    nowLoading(){
+      return this.loading
+    }
   },
   created() {
     this.getUserShoppingCar();
-    this.page.previewPage = 1;
+    console.log(this.model.shoppingCarArray)
   },
   methods: {
     setLoading(status) {
       this.$store.dispatch('setLoading', status);
     },
-    getUserShoppingCar() {
+    load(){
+      if(this.page.currentPage < this.page.totalPage){
+        this.loading = true;
+        this.page.currentPage ++;
+        this.getUserShoppingCar(false);
+        this.loading = false;
+      }
+    },
+    getUserShoppingCar(refreshPage) {
       this.setLoading(true);
       const sendData = {
         page: this.page.currentPage,
@@ -126,19 +100,24 @@ export default {
         userId: Number(sessionStorage.getItem('userId')),
         sortCol:"updateTime"
       };
+
       userApi.getShoppingCarList(sendData).then((res) => {
         const apiRes = res.data;
         if (apiRes.success) {
-
           const onePageData = apiRes.data.content;
-          this.page.total = apiRes.data.totalElements;
+          this.page.totalPage = apiRes.data.totalPages;
 
           // 後端資料傳過來後，預設「是否被選中」、「購買數量」這兩個值
           onePageData.forEach(apiData => {
-            apiData.isSelected = false;
+
+            // 若全選被勾起，把新進資料都勾選
+            if(this.selectAll){
+              apiData.isSelected = true;
+            } else {
+              apiData.isSelected = false;
+            }
             apiData.amount = 1;
             apiData.buyPrice = apiData.product.price;
-
             // 判斷是否已在前端被選中，將塞入購買數量與勾選塞入
             this.selectProductArray.forEach(selectData => {
               if (selectData.id === apiData.id) {
@@ -149,7 +128,15 @@ export default {
             });
           });
 
-          this.model.shoppingCarArray = onePageData;
+          // 判斷是否重load整頁的資料
+          if(refreshPage){ 
+            this.model.shoppingCarArray = onePageData;
+          } else {
+            onePageData.forEach(item =>{
+              this.model.shoppingCarArray.push(item);
+            })
+          }
+
           // 若使用者是按立刻購買過來的，因為後端排序的關係會在第一筆，所以把第一筆資料勾選，並塞入被選擇的 array 中
           if (sessionStorage.getItem('buyNow')) {
             const buyItem = this.model.shoppingCarArray[0];
@@ -161,20 +148,6 @@ export default {
         setTimeout(() => {
           this.setLoading(false);
         }, 500);
-      });
-    },
-    changePage() {
-      // 正確填寫資訊才能切頁
-      this.$refs.shoppingCarRef.validate(valid => {
-        if (valid) {
-          this.page.previewPage = this.page.currentPage;
-          this.getUserShoppingCar();
-        } else {
-          this.page.currentPage = this.page.previewPage;
-          ElementUI.Notification.error({
-            message: '輸入資料有誤',
-          });
-        }
       });
     },
     removeFromShoppingCar() {
@@ -249,6 +222,12 @@ export default {
 
   .top-total-descrip {
     margin-right: 3%;
+  }
+}
+.form{
+  //height: 80%;
+  .table{
+    height: 100%;
   }
 }
 
