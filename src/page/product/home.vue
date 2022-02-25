@@ -117,12 +117,18 @@ export default {
         });
         router.push('/login');
       } else {
+        //判斷使用者購物車中是否有該商品
         const sendData = {
-          userId: parseInt(sessionStorage.getItem('userId')),
-          productId: product.id,
+          userId: Number(sessionStorage.getItem('userId')),
+          updateList:[],
         };
+        var addItem = new Object();
+        addItem.productId = product.id;
+        addItem.saveAmount = 1;
 
-        userApi.addToShoppingCar (sendData).then((res) => {
+        sendData.updateList.push(addItem);
+
+        userApi.addShoppingCar(sendData).then((res) => {
           const apiRes = res.data;
           if (apiRes.success) {
             // 若是點擊購買按鈕，跳轉至購物車頁面，並且在 session 中加入變數，讓購物車頁面可以判斷是否勾選第一項商品

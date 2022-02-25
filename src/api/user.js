@@ -17,10 +17,10 @@ export default {
   getBuylist(sendData) {
     return http.post('/user/getBuylist', sendData);
   },
-  addToShoppingCar(sendData) {
-    return http.post('/user/addToShoppingCar', sendData);
+  addShoppingCar(sendData) {
+    return http.post('/user/addShoppingCar', sendData);
   },
-  removeFromShoppingCar(sendData) {
-    return http.delete('/user/removeFromShoppingCar', {data:sendData});
+  updateShoppingCar(sendData) {
+    return http.delete('/user/updateShoppingCar', {data:sendData});
   },
 };
