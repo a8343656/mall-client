@@ -4,42 +4,34 @@
       div(class="top-button")
         el-button(:disabled="selectProductArray.length == 0" type="primary" @click="goCheckout()") 去結帳
         el-button(:disabled="selectProductArray.length == 0" @click="removeFromShoppingCar()" :loading="deleteBtnLoading") 刪除
-        el-checkbox(v-model="selectAll") 全選
+        el-button(@click="test")
       div(class="top-total-descrip")
         H4 總共{{selectProductArray.length}}個商品
         H1 總金額{{totalPrice}}
 
-    el-form(class="form" :model="model")
-      el-table(class="table"
-              height="400"
-              :data="model.shoppingCarArray" 
-              :cell-style="{padding: '0', height: '100px'}" 
-              v-el-table-infinite-scroll="load"
-              infinite-scroll-disabled="scrollDisabled")
-        el-table-column(label="勾選" width="150")
-          template(slot-scope="scope")
-            el-form-item(:prop="'shoppingCarArray.'+scope.$index+'.isSelected'" )
-              el-checkbox(v-model="scope.row.isSelected" @change="rowChange(scope.row)" )
-
-        el-table-column(label="商品狀態")
-          template(slot-scope="scope")
-            p(class="proudct-text" v-if="scope.row.product.amount != 0 && scope.row.product.isBuyable == 1") 正常
-            p(class="proudct-warn" v-if="scope.row.product.amount == 0 && scope.row.product.isBuyable != 0") 庫存不足
-            p(class="proudct-warn" v-if="scope.row.product.isBuyable == 0") 商品下架中
-
-        el-table-column(label="商品id" prop="product.id")
-
-        el-table-column(label="庫存數量" prop="product.amount")
-
-        el-table-column(label="單價" prop="product.price")
-
-        el-table-column(label="購買金額" prop="buyPrice")
-
-        el-table-column(label="購買數量" )
-          template(slot-scope="scope")
-            div(class="input-form")
-              el-form-item(:prop="'shoppingCarArray.'+scope.$index+'.amount'" )
-                el-input-number(class="input" type="number"  v-model.number="scope.row.amount" @change="rowChange(scope.row)")
+    el-table(class="table"
+            ref="shoppingCarTable"
+            height="400"
+            :data="shoppingCarArray"
+            @selection-change="selectChange"
+            @select-all="selectAllChange"
+            :cell-style="{padding: '0', height: '100px'}" 
+            v-el-table-infinite-scroll="load"
+            infinite-scroll-disabled="scrollDisabled")
+      el-table-column(label="勾選" type="selection" width="150")
+      el-table-column(label="商品狀態")
+        template(slot-scope="scope")
+          p(class="proudct-text" v-if="scope.row.product.amount != 0 && scope.row.product.isBuyable == 1") 正常
+          p(class="proudct-warn" v-if="scope.row.product.amount == 0 && scope.row.product.isBuyable != 0") 庫存不足
+          p(class="proudct-warn" v-if="scope.row.product.isBuyable == 0") 商品下架中
+      el-table-column(label="商品id" prop="product.id")
+      el-table-column(label="庫存數量" prop="product.amount")
+      el-table-column(label="單價" prop="product.price")
+      el-table-column(label="購買金額" prop="buyPrice")
+      el-table-column(label="購買數量" )
+        template(slot-scope="scope")
+          div(class="input-form")
+            el-input-number(class="input" type="number"  v-model.number="scope.row.amount" @change="rowChange(scope.row)")
 </template>
 
 <script>
@@ -50,9 +42,7 @@ import userApi from '@/api/user';
 export default {
   data() {
     return {
-      model: {
-        shoppingCarArray: [],
-      },
+      shoppingCarArray: [],
       totalPrice: 0,
       selectProductArray: [],
       page: {
@@ -78,9 +68,22 @@ export default {
   },
   created() {
     this.getUserShoppingCar();
-    console.log(this.model.shoppingCarArray)
   },
   methods: {
+    test(){
+      this.$refs.shoppingCarTable.toggleRowSelection(this.shoppingCarArray[0],true);
+    },
+    selectChange(selectRow){
+      this.selectProductArray = selectRow;
+      // 重新計算總價
+      this.totalPrice = 0;
+      this.selectProductArray.forEach(selectData => {
+        this.totalPrice += selectData.amount * selectData.product.price;
+      });
+    },
+    selectAllChange(selectRow){
+      this.selectAll = selectRow.length != 0 
+    },
     setLoading(status) {
       this.$store.dispatch('setLoading', status);
     },
@@ -107,41 +110,28 @@ export default {
           const onePageData = apiRes.data.content;
           this.page.totalPage = apiRes.data.totalPages;
 
-          // 後端資料傳過來後，預設「是否被選中」、「購買數量」這兩個值
-          onePageData.forEach(apiData => {
+          // 依照 DB 的購買數量，計算出購買的金額
+          onePageData.forEach(apiData =>{
+            apiData.buyPrice = apiData.product.price * apiData.amount;
+          })
 
-            // 若全選被勾起，把新進資料都勾選
-            if(this.selectAll){
-              apiData.isSelected = true;
-            } else {
-              apiData.isSelected = false;
-            }
-            apiData.amount = 1;
-            apiData.buyPrice = apiData.product.price;
-            // 判斷是否已在前端被選中，將塞入購買數量與勾選塞入
-            this.selectProductArray.forEach(selectData => {
-              if (selectData.id === apiData.id) {
-                apiData.buyPrice = selectData.buyPrice;
-                apiData.amount = selectData.amount;
-                apiData.isSelected = true;
-              }
-            });
-          });
+          //判斷使用者是否全選
+          if(this.selectAll){
+            this.$refs.shoppingCarTable.toggleAllSelection();
+          }
 
           // 判斷是否重load整頁的資料
           if(refreshPage){ 
-            this.model.shoppingCarArray = onePageData;
+            this.shoppingCarArray = onePageData;
           } else {
             onePageData.forEach(item =>{
-              this.model.shoppingCarArray.push(item);
+              this.shoppingCarArray.push(item);
             })
           }
 
-          // 若使用者是按立刻購買過來的，因為後端排序的關係會在第一筆，所以把第一筆資料勾選，並塞入被選擇的 array 中
+          // 若使用者是按立刻購買過來的，因為後端排序的關係會在第一筆，所以把第一筆資料勾選
           if (sessionStorage.getItem('buyNow')) {
-            const buyItem = this.model.shoppingCarArray[0];
-            buyItem.isSelected = true;
-            this.rowChange(buyItem);
+            this.$refs.shoppingCarTable.toggleRowSelection(this.shoppingCarArray[0],true);
             sessionStorage.removeItem('buyNow');
           }
         }
@@ -177,25 +167,31 @@ export default {
       });
     },
     rowChange(row) {
+      // 呼叫更新購物車 API
+
       // 計算購買金額
       row.buyPrice = row.product.price * row.amount; // eslint-disable-line no-param-reassign
 
-      // 先從已選擇的清單中移除
-      this.selectProductArray = this.selectProductArray.filter(product => product.id !== row.id);
-      // 如果該筆資料是有被選中的，判斷只是購買數量變更，利用移除後再新增當作更新
-      if (row.isSelected) {
+      // 若該行被選中
+      if(this.selectProductArray.includes(row)){
+        //先從 array 中移除在加入，更新購買金額
+        this.selectProductArray = this.selectProductArray.filter(product => product.id !== row.id);
         this.selectProductArray.push(row);
+        //重新計算總價
+        this.totalPrice = 0;
+        this.selectProductArray.forEach(selectData => {
+          this.totalPrice += selectData.amount * selectData.product.price;
+        });
       }
-      this.totalPrice = 0;
-      this.selectProductArray.forEach(selectData => {
-        this.totalPrice += selectData.amount * selectData.product.price;
-      });
     },
     goCheckout() {
       this.setLoading(true);
       sessionStorage.setItem('buyArray', JSON.stringify(this.selectProductArray));
       router.push({ path: '/product/buy_page' });
     },
+    updateShoppingCar(action){
+
+    }
   },
 };
 </script>
