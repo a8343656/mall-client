@@ -157,17 +157,20 @@ export default {
               });
 
               // 呼叫 api 把已購買的商品移出購物車，並轉跳回首頁
-              const deletIdList = []
+              const deleteIdList = []
               this.buyArray.forEach(item => {
-                deletIdList.push(item.productId);
+                var deleteItem = new Object();
+                deleteItem.productId = item.product.id
+                deleteIdList.push(deleteItem);
               });
 
               const sendData2 = {
                 userId: Number(sessionStorage.getItem('userId')),
-                productIdList: deletIdList,
+                action:'delete',
+                updateList: deleteIdList,
               };
 
-              userApi.removeFromShoppingCar(sendData2).then(() => {
+              userApi.updateShoppingCar(sendData2).then(() => {
                 router.push('/');
               });
             }

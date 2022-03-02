@@ -9,8 +9,8 @@
         H1 總金額{{totalPrice}}
 
     el-table(class="table"
+            height='calc(100% - 127px)'
             ref="shoppingCarTable"
-            height="400"
             :data="shoppingCarArray"
             @selection-change="selectChange"
             @select-all="selectAllChange"
@@ -148,6 +148,7 @@ export default {
       });
     },
     remove() {
+      console.log('a');
       this.updateShoppingCar('delete',this.selectProductArray)
     },
     amountChange(currentValue, oldValue, row) {
@@ -209,13 +210,17 @@ export default {
         sendData.updateList.push(updateItem);
       })
       userApi.updateShoppingCar(sendData);
+
+      if(action == 'delete'){
+        this.getUserShoppingCar(true);
+      }
     }
   },
 };
 </script>
 <style lang="scss" scoped>
 .all {
-  padding: 10px;
+  padding: 15px;
   box-sizing: border-box;
 }
 .proudct-warn {
@@ -226,6 +231,7 @@ export default {
   font-size: 15px
 }
 .top-group {
+  height: 127px;
   display: flex;
   justify-content: space-between;
 
@@ -238,12 +244,11 @@ export default {
     margin-right: 3%;
   }
 }
-.form{
-  //height: 80%;
-  .table{
-    height: 100%;
-  }
+
+.table{
+  height: 100%;
 }
+
 
 .picture-div {
 
