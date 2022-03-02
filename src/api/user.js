@@ -21,6 +21,6 @@ export default {
     return http.post('/user/addShoppingCar', sendData);
   },
   updateShoppingCar(sendData) {
-    return http.delete('/user/updateShoppingCar', {data:sendData});
+    return http.post('/user/updateShoppingCar', sendData);
   },
 };
