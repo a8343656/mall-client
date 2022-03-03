@@ -54,6 +54,11 @@ export default new Router({
       component: view('layout/homepage＿layout'),
     },
     {
+      path: '/404',
+      name: '404',
+      component: view('common/404'),
+    },
+    {
       path: '/login',
       name: 'login',
       component: view('auth/login'),
@@ -71,15 +76,9 @@ export default new Router({
       children: getRoute(MemberRoute),
       component: view('layout/member_layout'),
     },
-    // {
-    //   path: '*',
-    //   meta: {
-    //     title: 'unable_show_page',
-    //     auth: true,
-    //     checkPermissions: false,
-    //   },
-    //   props: { message: 'unable_show_page' },
-    //   component: view('error_page'),
-    // },
+    {
+      path: '*',
+      redirect: '/product/home',
+    },
   ],
 });

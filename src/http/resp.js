@@ -21,6 +21,7 @@ export default {
       if(response.errorCode == '1001104' || response.errorCode == '1001103'){
         sessionStorage.removeItem('userId');
         sessionStorage.removeItem('userToken');
+        sessionStorage.setItem('lastPage',router.currentRoute.path)
         router.push('/login', () => {
           ElementUI.Notification.warning({
             message: "閒置過久，請重新登入"
@@ -37,7 +38,6 @@ export default {
 
   },
   async failureCall(err) {
-    console.log(err);
     return Promise.reject(err);
 
   },

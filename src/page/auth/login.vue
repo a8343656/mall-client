@@ -49,7 +49,13 @@ export default {
             if (apiRes.success) {
               sessionStorage.setItem('userId', apiRes.data.userId);
               sessionStorage.setItem('userToken', apiRes.data.token);
-              this.$router.push('/');
+              // 若是登入超時，導回上一頁
+              if(sessionStorage.getItem('lastPage')){
+                this.$router.push(sessionStorage.getItem('lastPage'));
+                sessionStorage.removeItem('lastPage');
+              } else {
+                this.$router.push('/');
+              }
             }
           });
         }

@@ -3,8 +3,8 @@ export default {
     if(sessionStorage.getItem('userId') != null){
       request.headers.userId = sessionStorage.getItem('userId');
       request.headers.userToken = sessionStorage.getItem('userToken');
+      
     }
-
     return request;
   },
   /* global Promise */
