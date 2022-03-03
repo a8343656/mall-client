@@ -20,8 +20,8 @@
 
       el-button(class="button", v-show ="isLogin", @click="logout" ) 登出
 
-
-    router-view(v-loading="getLoading", class="rounter-context")
+    div(v-loading="getLoading")
+      router-view(class="rounter-context")
 </template>
 <script>
 import ElementUI from 'element-ui';

@@ -22,7 +22,7 @@
           span(slot="title") 訂單管理
 
       // 中央顯示區域  v-loading="showLoading"
-      router-view( v-loading.fullscreen="getLoading" class="right-context" )
+      router-view( v-loading="getLoading" class="right-context" )
 </template>
 <script>
 import ElementUI from 'element-ui';

@@ -93,6 +93,7 @@ export default {
       },
       getBuylist(refreshPage){
         if(refreshPage){
+          this.setLoading(true)
           this.page.currentPage = 1;
         }
         const sendData = {
@@ -111,7 +112,8 @@ export default {
 
             setTimeout(() => {
               if(refreshPage){
-               this.buylist = apiRes.data.content;
+                this.setLoading(false)
+                this.buylist = apiRes.data.content;
               } else {
                 apiRes.data.content.forEach(item => {
                   this.buylist.push(item);
