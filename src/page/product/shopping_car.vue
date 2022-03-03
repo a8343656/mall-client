@@ -1,12 +1,15 @@
 <template lang="pug">
   div(class="all")
     div(class="top-group")
-      div(class="top-button")
-        el-button(:disabled="selectProductArray.length == 0" type="primary" @click="goCheckout()") 去結帳
+      div(class="top-left-group")
+        el-button(:disabled="selectProductArray.length == 0 || isSelectDisableProdcut" type="primary" @click="goCheckout()") 去結帳
         el-button(:disabled="selectProductArray.length == 0" @click="remove" :loading="deleteBtnLoading") 刪除
+        H5(v-if="isSelectDisableProdcut" style="color:red; margin-left:10px") 包含無效商品,無法結帳
       div(class="top-total-descrip")
-        H4 總共{{selectProductArray.length}}個商品
-        H1 總金額{{totalPrice}}
+        div(v-if="!isSelectDisableProdcut")
+          H4 總共{{selectProductArray.length}}個商品
+          H1 總金額{{totalPrice}}
+        
 
     el-table(class="table"
             height='calc(100% - 127px)'
@@ -14,7 +17,7 @@
             :data="shoppingCarArray"
             @selection-change="selectChange"
             @select-all="selectAllChange"
-            :cell-style="{padding: '0', height: '100px'}" 
+            :cell-style="{ height: '100px'}" 
             v-el-table-infinite-scroll="load"
             infinite-scroll-disabled="scrollDisabled")
       el-table-column(label="勾選" type="selection" width="150")
@@ -22,7 +25,7 @@
         template(slot-scope="scope")
           p(class="proudct-text" v-if="scope.row.product.amount != 0 && scope.row.product.isBuyable == 1") 正常
           p(class="proudct-warn" v-if="scope.row.product.amount == 0 && scope.row.product.isBuyable != 0") 庫存不足
-          p(class="proudct-warn" v-if="scope.row.product.isBuyable == 0") 商品下架中
+          p(class="proudct-warn" v-if="scope.row.product.isBuyable == 0") 商品已下架
       el-table-column(label="商品名稱" prop="product.name")
       el-table-column(label="庫存數量" prop="product.amount")
       el-table-column(label="單價" prop="product.price")
@@ -57,6 +60,7 @@ export default {
       deleteBtnLoading: false,
       selectAll: false,
       loading: false,
+      isSelectDisableProdcut: false,
     };
   },
   computed:{
@@ -76,9 +80,15 @@ export default {
       this.selectProductArray = selectRow;
       // 重新計算總價
       this.totalPrice = 0;
+      var cantBuy = false;
       this.selectProductArray.forEach(selectData => {
+        if(selectData.product.amount == 0 || selectData.product.isBuyable == '0'){
+          cantBuy = true;
+          return;
+        }
         this.totalPrice += selectData.amount * selectData.product.price;
       });
+      this.isSelectDisableProdcut = cantBuy;
     },
     selectAllChange(selectRow){
       this.selectAll = selectRow.length != 0 
@@ -226,6 +236,7 @@ export default {
 .proudct-warn {
   color: red;
   font-size: 15px
+  
 }
 .proudct-text {
   font-size: 15px
@@ -233,9 +244,10 @@ export default {
 .top-group {
   height: 127px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
 
-  .top-button {
+  .top-left-group {
     display: flex;
     align-items: center;
   }
