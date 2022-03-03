@@ -11,7 +11,7 @@
     el-button(class="change-data-button" type="primary" @click="openChangePwsWindow") 變更密碼
 
 
-    el-dialog(:visible.sync="changePwsWindowVisiable", title="變更密碼", width="550px")
+    el-dialog(:visible.sync="changePwsWindowVisiable", title="變更密碼", width="550px" :append-to-body='true')
       el-form(:model="changePwsState", ref="changePwsRef", :rules="changePwsRules", label-position="top", label-width="90px")
         div
           h3 需含一個大寫、一個小寫、一個數字、一個特殊字元
@@ -25,8 +25,12 @@
         el-button(@click="changePwsCancel()") 取消
 
 
-    el-dialog(:visible.sync="changeUserDataVisiable", title="更改會員資料", width="550px")
-      el-form(:model="changeUserData", ref="changeUserDataRef", :rules="changeUserDataRules", label-position="top", label-width="90px")
+    el-dialog(:visible.sync="changeUserDataVisiable", title="更改會員資料", width="550px" :append-to-body='true')
+      el-form(:model="changeUserData", 
+              ref="changeUserDataRef", 
+              :rules="changeUserDataRules", 
+              label-position="top", 
+              label-width="90px")
         div(class="input")
           el-form-item(label="姓名", prop="name")
             el-input( class="input", v-model="changeUserData.name" )
