@@ -5,7 +5,7 @@
       el-descriptions(title="會員資料", :column="1" , label-class-name ="description-label", contentClassName="my-content" border)
           el-descriptions-item(label="姓名") {{userData.name}}
           el-descriptions-item(label="地址", ) {{userData.address}}
-          el-descriptions-item(label="電話", ) {{userData.phone}}
+          el-descriptions-item(label="電話", ) {{userData.cellPhone}}
           el-descriptions-item(label="帳號狀態", ) {{userData.isShopable?'正常':'無法購物'}}
     el-button(class="change-data-button" type="primary" @click="openChangeUserDataWindow") 更改資料
     el-button(class="change-data-button" type="primary" @click="openChangePwsWindow") 變更密碼
@@ -36,6 +36,8 @@
             el-input( class="input", v-model="changeUserData.name" )
           el-form-item(label="地址", prop="address")
             el-input(class="input", v-model="changeUserData.address")
+          el-form-item(label="手機號碼", prop="cellphone")
+            el-input(class="input", v-model="changeUserData.cellPhone")
 
       span(slot="footer" class="dialog-footer")
         el-button(type="primary", @click="changeUserDataOk()" :loading="saveBtnLoading") 保存
@@ -68,6 +70,16 @@ export default {
         callback();
       }
     };
+    const phoneValidator = (rule, value, callback) => {
+      const reg = /^09\d{2}-?\d{6}$/;
+      if (value === '') {
+        callback(new Error('請輸入電話'));
+      } else if (!reg.test(value)) {
+        callback(new Error('請輸入正常的手機號碼'));
+      } else {
+        callback();
+      }
+    };
     const changePwsRules = {
       newPws: [{ required: true, whitespace: true, validator: PwsValidator }],
       confirmPws: [{ required: true, validator: confrimPwsValidator }],
@@ -75,7 +87,7 @@ export default {
     const changeUserDataRules = {
       name: [{ required: true, whitespace: true, message: '姓名不得為空' }],
       address: [{ required: true, whitespace: true, message: '地址不得為空' }],
-      //phone: [{ required: true, whitespace: true, message: '電話不得為空' }],
+      cellPhone: [{ required: true, whitespace: true, validator: phoneValidator }],
     };
     return {
       userData: {
@@ -177,6 +189,7 @@ export default {
         userId: Number(sessionStorage.getItem('userId')),
         name: this.changeUserData.name,
         address: this.changeUserData.address,
+        cellPhone:this.changeUserData.cellPhone.replace('-',''), // DB儲存的電話不含有 - 
       };
 
       this.$refs.changeUserDataRef.validate(valid => {
