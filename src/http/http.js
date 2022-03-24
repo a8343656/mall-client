@@ -6,7 +6,7 @@ const Http = axios.create({
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
   },
-  baseURL: 'http://localhost:8081'
+  baseURL: process.env.VUE_APP_BASE_URL
 });
 
 Http.interceptors.request.use(Request.successRequest, Request.errRequest);
