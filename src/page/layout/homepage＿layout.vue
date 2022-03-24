@@ -1,5 +1,5 @@
 <template lang="pug">
-  div
+  div(class="all")
     // topbar們
     div(class="topbar")
       // 按鈕們
@@ -66,7 +66,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.all{
+  height: 100vh;
+}
 .topbar {
   position: sticky;
   background: #2c3e50;

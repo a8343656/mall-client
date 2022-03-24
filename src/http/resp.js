@@ -38,6 +38,16 @@ export default {
 
   },
   async failureCall(err) {
+    if(err.response){
+      const response = err.response
+      
+      if(response.status == 500){
+        ElementUI.Notification.warning({
+          message: "錯誤500，請聯繫管理員"
+        });
+      }
+    }
+
     return Promise.reject(err);
 
   },

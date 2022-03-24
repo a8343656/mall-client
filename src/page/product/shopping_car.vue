@@ -158,7 +158,6 @@ export default {
       });
     },
     remove() {
-      console.log('a');
       this.updateShoppingCar('delete',this.selectProductArray)
     },
     amountChange(currentValue, oldValue, row) {

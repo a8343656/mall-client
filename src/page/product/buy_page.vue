@@ -1,7 +1,7 @@
 <template lang="pug">
   div(class="all")
     //此處兩層 div 是為了要讓內層水平置中
-    div
+    div(class="context")
       el-card(class="buy-table")
         el-table(:data="buyArray")
           el-table-column(label="商品名稱" prop="product.name")
@@ -28,12 +28,12 @@
             // 宅配輸入地址
             el-input(v-if="buyData.pickup == 1" v-model="buyData.sendAddress")
 
-          el-form-item(label="付款方式" prop="pay")
-            el-radio-group(v-model="buyData.pay")
+          el-form-item(label="付款方式" prop="paymentMethod")
+            el-radio-group(v-model="buyData.paymentMethod")
               el-radio(:label="0") 信用卡
               el-radio(:label="1") 貨到付款
 
-          el-form-item(v-if="buyData.pay == 0" label="卡號" prop="cardNumber")
+          el-form-item(v-if="buyData.paymentMethod == 0" label="卡號" prop="cardNumber")
             el-input(v-model="buyData.cardNumber" type="phone" maxlength="19")
 
         div(class="button-group")
@@ -62,7 +62,7 @@ export default {
       buyData: {
         pickup: 0,
         sendAddress: '',
-        pay: 0,
+        paymentMethod: 0,
         cardNumber: '',
       },
       buyDataRules: {
@@ -72,7 +72,7 @@ export default {
         sendAddress: [{
           required: true, message: '請填入寄送地點',
         }],
-        pay: [{
+        paymentMethod: [{
           required: true, message: '請選擇付款方式',
         }],
         cardNumber: [{
@@ -133,6 +133,8 @@ export default {
       
       const sendData = {
         userId: Number(sessionStorage.getItem('userId')),
+        sendAddress: this.buyData.sendAddress,
+        paymentMethod: this.buyData.paymentMethod,
         totalPrice: this.totalPrice,
         detailList: []
       };
@@ -140,7 +142,7 @@ export default {
         var detail = new Object();
         detail.productId = item.productId;
         detail.amount = item.amount;
-        detail.productPrice = item.product.price;
+        detail.oneProductPrice = item.product.price;
 
         sendData.detailList.push(detail);
       })
@@ -188,7 +190,9 @@ export default {
 .all {
   display: flex;
   justify-content: center;
-  margin-top: 1.5%;
+  .context{
+    padding: 20px;
+  }
 }
 .total-descrip {
   text-align: right;

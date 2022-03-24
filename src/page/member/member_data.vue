@@ -36,7 +36,7 @@
             el-input( class="input", v-model="changeUserData.name" )
           el-form-item(label="地址", prop="address")
             el-input(class="input", v-model="changeUserData.address")
-          el-form-item(label="手機號碼", prop="cellphone")
+          el-form-item(label="手機號碼", prop="cellPhone")
             el-input(class="input", v-model="changeUserData.cellPhone")
 
       span(slot="footer" class="dialog-footer")
@@ -98,6 +98,7 @@ export default {
       changeUserData:{
         name: '',
         address: '',
+        cellPhone:'',
       },
       changePwsWindowVisiable: false,
       changePwsRules,

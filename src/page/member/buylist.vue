@@ -16,13 +16,17 @@
               div
                 div(class="top-describe")
                   div
-                    p 訂單編號:{{item.id}}
-                  div
-                    H2 總金額:{{item.totalPrice}}
                     el-tag(v-if="item.status == -1" type="danger") 訂單已取消
                     el-tag(v-if="item.status == 0" ) 訂單處理中
                     el-tag(v-if="item.status == 1" type="warning") 寄送中
                     el-tag(v-if="item.status == 2" type="success") 已完成
+                    p 訂單編號: {{item.id}}
+                    p 寄送地點: {{item.sendAddress}}
+                  div
+                    H2 總金額:{{item.totalPrice}}
+                    p(v-if="item.paymentMethod == 0") 信用卡付清
+                    p(v-if="item.paymentMethod == 1") 貨到付款
+                    
 
               el-table(:data="item.buylistDetail")
                 el-table-column(label="商品名稱" prop="product.name")
