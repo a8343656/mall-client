@@ -42,8 +42,8 @@ export default {
   },
   methods: {
     logout() {
-      sessionStorage.removeItem('userId');
-      sessionStorage.removeItem('userToken');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('userToken');
       this.isLogin = false;
 
       if (this.$router.currentRoute.name === 'shopping_car') {
@@ -55,7 +55,7 @@ export default {
     },
     // 因為已經在 axios 攔截器 check token ，這邊改為判斷是否有 id 就當作以登入
     CheckLogin() {
-      if (sessionStorage.getItem('userId')) {
+      if (localStorage.getItem('userId')) {
         this.isLogin = true;
       } else {
         this.isLogin = false;

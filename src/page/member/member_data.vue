@@ -121,7 +121,7 @@ export default {
     getUserData() {
       this.setLoading(true);
       const sendData = {
-        userId: Number(sessionStorage.getItem('userId'))
+        userId: Number(localStorage.getItem('userId'))
       };
       userApi.getUserData(sendData).then((res) => {
         const apiRes = res.data;
@@ -152,7 +152,7 @@ export default {
     },
     changePwsOk() {
       const sendData = {
-        userId: Number(sessionStorage.getItem('userId')),
+        userId: Number(localStorage.getItem('userId')),
         password: this.changePwsState.newPws,
       };
       this.$refs.changePwsRef.validate(valid => {
@@ -183,11 +183,12 @@ export default {
     openChangeUserDataWindow() {
       this.changeUserData.name = this.userData.name;
       this.changeUserData.address = this.userData.address;
+      this.changeUserData.cellPhone = this.userData.cellPhone;
       this.changeUserDataVisiable = true;
     },
     changeUserDataOk() {
       const sendData = {
-        userId: Number(sessionStorage.getItem('userId')),
+        userId: Number(localStorage.getItem('userId')),
         name: this.changeUserData.name,
         address: this.changeUserData.address,
         cellPhone:this.changeUserData.cellPhone.replace('-',''), // DB儲存的電話不含有 - 

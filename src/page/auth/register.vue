@@ -64,8 +64,8 @@ export default {
                 message: '註冊成功，跳轉至首頁',
               });
               // 註冊成功直接登入並跳轉至首頁
-              sessionStorage.setItem('userId', result.data.userId);
-              sessionStorage.setItem('userToken', result.data.token);
+              localStorage.setItem('userId', result.data.userId);
+              localStorage.setItem('userToken', result.data.token);
               this.$router.push('/');
             }
           });

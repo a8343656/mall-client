@@ -29,7 +29,7 @@ router.beforeEach((to, from, next) => {
    // 是否要檢查登入狀態
   if (to.meta.auth) {
     // 因為 axios 有設定 token 過期會導回根目錄，如果去的路徑是需要登入的，試著拿取使用者自身的資料，藉此檢查 token
-    const userId = sessionStorage.getItem('userId');
+    const userId = localStorage.getItem('userId');
 
     // 這邊只做判斷是否有 token ，是否過期交給 axios 攔截器
     if (userId) {

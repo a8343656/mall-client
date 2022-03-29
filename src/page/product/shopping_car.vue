@@ -109,7 +109,7 @@ export default {
       const sendData = {
         page: this.page.currentPage,
         pageSize: this.page.pageSize,
-        userId: Number(sessionStorage.getItem('userId')),
+        userId: Number(localStorage.getItem('userId')),
         sortCol:"updateTime"
       };
 
@@ -147,9 +147,9 @@ export default {
           }
 
           // 若使用者是按立刻購買過來的，因為後端排序的關係會在第一筆，所以把第一筆資料勾選
-          if (sessionStorage.getItem('buyNow')) {
+          if (localStorage.getItem('buyNow')) {
             this.$refs.shoppingCarTable.toggleRowSelection(this.shoppingCarArray[0],true);
-            sessionStorage.removeItem('buyNow');
+            localStorage.removeItem('buyNow');
           }
         }
         setTimeout(() => {
@@ -203,13 +203,13 @@ export default {
     },
     goCheckout() {
       this.setLoading(true);
-      sessionStorage.setItem('buyArray', JSON.stringify(this.selectProductArray));
+      localStorage.setItem('buyArray', JSON.stringify(this.selectProductArray));
       router.push({ path: '/product/buy_page' });
     },
     updateShoppingCar(action, selection){
       const sendData = {
         action: action,
-        userId: Number(sessionStorage.getItem('userId')),
+        userId: Number(localStorage.getItem('userId')),
         updateList: [],
       } 
       selection.forEach(item =>{

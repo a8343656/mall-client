@@ -1,8 +1,8 @@
 export default {
   async successRequest(request) {
-    if(sessionStorage.getItem('userId') != null){
-      request.headers.userId = sessionStorage.getItem('userId');
-      request.headers.userToken = sessionStorage.getItem('userToken');
+    if(localStorage.getItem('userId') != null){
+      request.headers.userId = localStorage.getItem('userId');
+      request.headers.userToken = localStorage.getItem('userToken');
       
     }
     return request;

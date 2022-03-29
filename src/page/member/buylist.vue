@@ -101,7 +101,7 @@ export default {
           this.page.currentPage = 1;
         }
         const sendData = {
-          userId: Number(sessionStorage.getItem('userId')),
+          userId: Number(localStorage.getItem('userId')),
           status:this.search.status,
           page: this.page.currentPage,
           pageSize: this.page.pageSize,
@@ -134,7 +134,7 @@ export default {
       },
       cancel(orderId){
         const sendData = {
-          userId: Number(sessionStorage.getItem('userId')),
+          userId: Number(localStorage.getItem('userId')),
           orderId: orderId,
         }
 

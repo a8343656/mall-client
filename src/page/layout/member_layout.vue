@@ -36,8 +36,8 @@ export default ({
   },
   methods: {
     logout() {
-      sessionStorage.removeItem('userId');
-      sessionStorage.removeItem('userToken');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('userToken');
       ElementUI.Notification.success({
         message: '已登出',
       });

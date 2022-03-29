@@ -105,8 +105,8 @@ export default {
   },
   created() {
     // 若 session 中沒有購買清單，重新導回主頁
-    if (sessionStorage.getItem('buyArray')) {
-      this.buyArray = JSON.parse(sessionStorage.getItem('buyArray'));
+    if (localStorage.getItem('buyArray')) {
+      this.buyArray = JSON.parse(localStorage.getItem('buyArray'));
       this.buyArray.forEach(product => {
         this.totalPrice += product.buyPrice;
       });
@@ -116,7 +116,7 @@ export default {
     }
   },
   beforeDestroy() {
-    sessionStorage.removeItem('buyArray');
+    localStorage.removeItem('buyArray');
   },
   methods: {
     setLoading(status) {
@@ -132,7 +132,7 @@ export default {
     sendOrder() {
       
       const sendData = {
-        userId: Number(sessionStorage.getItem('userId')),
+        userId: Number(localStorage.getItem('userId')),
         sendAddress: this.buyData.sendAddress,
         paymentMethod: this.buyData.paymentMethod,
         totalPrice: this.totalPrice,
@@ -167,7 +167,7 @@ export default {
               });
 
               const sendData2 = {
-                userId: Number(sessionStorage.getItem('userId')),
+                userId: Number(localStorage.getItem('userId')),
                 action:'delete',
                 updateList: deleteIdList,
               };

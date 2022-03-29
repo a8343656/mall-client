@@ -1,6 +1,7 @@
 <template lang="pug">
   div(class="all")
-    div
+    el-result(v-if="isProductNotFound" icon="warning" title="找無此商品")
+    div(v-if="!isProductNotFound")
       p(class="detail-title") {{product.name}}
       div(class="picture-div")
         img(class="image" :src="product.imageUrl")
@@ -30,7 +31,8 @@ export default {
         amount: '',
         imageUrl: '',
         price: 0,
-      }
+      },
+      isProductNotFound: false,
     };
   },
   created() {
@@ -49,6 +51,10 @@ export default {
 
         if (apiRes.success) {
           this.product = apiRes.data;
+        } else {
+          if(apiRes.errorCode == "1001301"){
+            this.isProductNotFound = true;
+          }
         }
         setTimeout(() => {
           this.setLoading(false);
@@ -63,7 +69,7 @@ export default {
     },
     addShoppingCar(product, isClickBuyButton) {
       // 若是沒有登入，導到登入頁
-      if (!sessionStorage.getItem('userId')) {
+      if (!localStorage.getItem('userId')) {
         ElementUI.Notification.warning({
           message: '尚未登入請先登入',
         });
@@ -71,7 +77,7 @@ export default {
         router.push('/login');
       } else {
         const sendData = {
-          userId: sessionStorage.getItem('userId'),
+          userId: localStorage.getItem('userId'),
           productId: product.id,
         };
         this.setLoading(true);
@@ -80,7 +86,7 @@ export default {
           if (apiRes.result) {
             // 若是點擊購買按鈕，跳轉至購物車頁面，並且在 session 中加入變數，讓購物車頁面可以判斷是否勾選第一項商品
             if (isClickBuyButton) {
-              sessionStorage.setItem('buyNow', true);
+              localStorage.setItem('buyNow', true);
               router.push({ path: '/product/shopping_car' });
             } else {
               // 單純點及加入購物車

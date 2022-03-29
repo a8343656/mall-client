@@ -47,12 +47,12 @@ export default {
           authApi.login(this.loginData).then((res) => {
             const apiRes = res.data;
             if (apiRes.success) {
-              sessionStorage.setItem('userId', apiRes.data.userId);
-              sessionStorage.setItem('userToken', apiRes.data.token);
+              localStorage.setItem('userId', apiRes.data.userId);
+              localStorage.setItem('userToken', apiRes.data.token);
               // 若是登入超時，導回上一頁
-              if(sessionStorage.getItem('lastPage')){
-                this.$router.push(sessionStorage.getItem('lastPage'));
-                sessionStorage.removeItem('lastPage');
+              if(localStorage.getItem('lastPage')){
+                this.$router.push(localStorage.getItem('lastPage'));
+                localStorage.removeItem('lastPage');
               } else {
                 this.$router.push('/');
               }

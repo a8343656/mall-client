@@ -19,9 +19,9 @@ export default {
     if(!response.success){
       // token 過期
       if(response.errorCode == '1001104' || response.errorCode == '1001103'){
-        sessionStorage.removeItem('userId');
-        sessionStorage.removeItem('userToken');
-        sessionStorage.setItem('lastPage',router.currentRoute.path)
+        localStorage.removeItem('userId');
+        localStorage.removeItem('userToken');
+        localStorage.setItem('lastPage',router.currentRoute.path)
         router.push('/login', () => {
           ElementUI.Notification.warning({
             message: "閒置過久，請重新登入"
