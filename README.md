@@ -1,4 +1,4 @@
-# mall-fornt
+# mall-frontend-vue
 
 ## 專案結構介紹
 
